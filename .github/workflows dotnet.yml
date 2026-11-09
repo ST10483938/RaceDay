@@ -1,0 +1,28 @@
+# This is a basic workflow to help you get started with Actions
+
+name: .NET CI
+
+on:
+  push:
+    branches: [ "main", "master", "part3" ]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        run: dotnet restore
+      - name: Build API and MVC
+        run: dotnet build --no-restore --configuration Release
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release
+      - name: Build MVC Docker image
+        run: docker build -t raceday-web ./RaceDay.Web
+
+
+         
